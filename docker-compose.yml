@@ -1,0 +1,100 @@
+# O'Dea Assistant: everything that runs on the on-site server.
+#
+#   cp .env.example .env     # then fill it in
+#   docker compose up -d                                 # Claude only
+#   docker compose --profile local up -d                 # + local model (Ollama, needs a GPU)
+#   docker compose --profile teams up -d                 # + Cloudflare Tunnel for Microsoft Teams
+#   docker compose run --rm orchestrator node dist/ingest/crawl.js   # index odea.org
+
+services:
+  caddy:
+    image: caddy:2.8
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-assistant.odea.local}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on: [oauth2-proxy, orchestrator]
+
+  # Microsoft 365 (Entra ID) sign-in for the web page. Passes the signed-in
+  # user's email and group ids to the orchestrator (TRUST_PROXY_AUTH=true).
+  oauth2-proxy:
+    image: quay.io/oauth2-proxy/oauth2-proxy:v7.7.1
+    restart: unless-stopped
+    command:
+      - --http-address=0.0.0.0:4180
+      - --reverse-proxy=true
+      - --provider=oidc
+      - --oidc-issuer-url=https://login.microsoftonline.com/${tenantId}/v2.0
+      - --oidc-groups-claim=groups
+      - --scope=openid email profile
+      - --email-domain=*
+      - --upstream=http://orchestrator:8080
+      - --pass-user-headers=true
+      - --skip-provider-button=true
+      - --cookie-secure=true
+      - --cookie-samesite=lax
+    environment:
+      OAUTH2_PROXY_CLIENT_ID: ${WEB_SSO_CLIENT_ID:?set WEB_SSO_CLIENT_ID in .env}
+      OAUTH2_PROXY_CLIENT_SECRET: ${WEB_SSO_CLIENT_SECRET:?set WEB_SSO_CLIENT_SECRET in .env}
+      OAUTH2_PROXY_COOKIE_SECRET: ${WEB_SSO_COOKIE_SECRET:?set WEB_SSO_COOKIE_SECRET in .env}
+      OAUTH2_PROXY_REDIRECT_URL: https://${SITE_ADDRESS}/oauth2/callback
+    expose: ["4180"]
+
+  orchestrator:
+    build: { context: ., dockerfile: orchestrator/Dockerfile }
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://odea:${POSTGRES_PASSWORD}@db:5432/odea
+    volumes:
+      - assistant-data:/data
+    depends_on:
+      db: { condition: service_healthy }
+    expose: ["8080"]
+
+  db:
+    image: pgvector/pgvector:pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: odea
+      POSTGRES_DB: odea
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes: [db-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odea"]
+      interval: 5s
+      retries: 20
+
+  # Local model (optional). Then set OLLAMA_URL=http://ollama:11434 in .env and
+  # pull a model once: docker compose exec ollama ollama pull qwen3-vl:8b
+  ollama:
+    image: ollama/ollama:latest
+    profiles: [local]
+    restart: unless-stopped
+    volumes: [ollama-data:/root/.ollama]
+    deploy:
+      resources:
+        reservations:
+          devices: [{ driver: nvidia, count: all, capabilities: [gpu] }]
+
+  # Microsoft Teams needs a public HTTPS address for /api/messages. The tunnel
+  # makes an outbound connection, so no firewall ports are opened. In the
+  # Cloudflare dashboard, route ONLY the path /api/messages to
+  # http://orchestrator:8080 (see docs/TEAMS.md).
+  cloudflared:
+    image: cloudflare/cloudflared:2024.12.2
+    profiles: [teams]
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?set CLOUDFLARE_TUNNEL_TOKEN in .env}
+    depends_on: [orchestrator]
+
+volumes:
+  caddy-data:
+  assistant-data:
+  db-data:
+  ollama-data:

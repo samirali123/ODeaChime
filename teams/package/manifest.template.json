@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.17",
+  "version": "0.1.0",
+  "id": "${TEAMS_APP_ID}",
+  "developer": {
+    "name": "O'Dea High School",
+    "websiteUrl": "${WEBSITE_URL}",
+    "privacyUrl": "${PRIVACY_URL}",
+    "termsOfUseUrl": "${TERMS_URL}"
+  },
+  "name": {
+    "short": "O'Dea Assistant",
+    "full": "O'Dea Assistant"
+  },
+  "description": {
+    "short": "Ask about bell schedules, events and school info.",
+    "full": "The O'Dea Assistant answers questions about O'Dea High School: today's bell schedule, events, athletics, policies and contacts, using the school website and the bell system. Answers can be wrong; check important details with the front office."
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "accentColor": "#7A1F2B",
+  "bots": [
+    {
+      "botId": "${clientId}",
+      "scopes": ["personal", "team", "groupChat"],
+      "supportsFiles": false,
+      "isNotificationOnly": false,
+      "commandLists": [
+        {
+          "scopes": ["personal", "team", "groupChat"],
+          "commands": [
+            { "title": "What schedule is today?", "description": "Today's bell schedule" },
+            { "title": "When is lunch today?", "description": "Lunch time for today's schedule" },
+            { "title": "new chat", "description": "Start a new conversation" }
+          ]
+        }
+      ]
+    }
+  ],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": []
+}

@@ -1,0 +1,35 @@
+# HTTPS for the web page. On a school-only hostname Caddy issues a
+# certificate from its own local CA ("tls internal"); install that root on
+# staff devices, or swap in the school's certificate / a public hostname.
+{$SITE_ADDRESS} {
+	tls internal
+	encode zstd gzip
+
+	# Identity headers may only come from oauth2-proxy, never from a browser.
+	request_header -X-Forwarded-User
+	request_header -X-Forwarded-Email
+	request_header -X-Forwarded-Groups
+	request_header -X-Forwarded-Preferred-Username
+
+	# Teams reaches /api/messages through the Cloudflare tunnel, never here.
+	handle /api/messages {
+		respond 404
+	}
+
+	# The BellForge desktop app authenticates with its own token, not a
+	# browser sign-in, so this one path skips oauth2-proxy.
+	handle /api/bellforge/sync {
+		reverse_proxy orchestrator:8080
+	}
+
+	# Everything else requires Microsoft 365 sign-in.
+	handle {
+		reverse_proxy oauth2-proxy:4180
+	}
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy no-referrer
+		X-Frame-Options DENY
+	}
+}

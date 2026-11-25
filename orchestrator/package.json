@@ -1,0 +1,31 @@
+{
+  "name": "odea-assistant-orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chat API for the O'Dea Assistant: model router, tool loop, and data-source tools",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc -p tsconfig.json && cp -r src/data dist/",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "crawl": "tsx src/ingest/crawl.ts",
+    "db:init": "tsx src/ingest/init-db.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.14.0",
+    "@microsoft/agents-hosting": "^1.10.2",
+    "cheerio": "^1.0.0",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/pg": "^8.11.10",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

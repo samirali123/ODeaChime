@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O'Dea Assistant</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="mark" aria-hidden="true">O</span> O'Dea Assistant</div>
+    <button id="new-chat" class="ghost" type="button">New chat</button>
+  </header>
+
+  <main id="log" class="log" aria-live="polite">
+    <section class="welcome" id="welcome">
+      <h1>Ask about O'Dea</h1>
+      <p>Bell schedules, events, athletics, policies and more. You can also attach a photo of a flyer or schedule.</p>
+      <div class="chips">
+        <button type="button" class="chip">What schedule is today?</button>
+        <button type="button" class="chip">When is lunch on a Gold 2-hour late start?</button>
+        <button type="button" class="chip">How do I contact the attendance office?</button>
+      </div>
+    </section>
+  </main>
+
+  <form id="composer" class="composer">
+    <div id="preview" class="preview" hidden>
+      <img id="preview-img" alt="Attached photo">
+      <button type="button" id="remove-photo" class="ghost small" aria-label="Remove photo">✕</button>
+    </div>
+    <div class="row">
+      <label class="attach ghost" title="Attach a photo">
+        <input id="photo" type="file" accept="image/jpeg,image/png,image/gif,image/webp" hidden>
+        <span aria-hidden="true">📷</span><span class="sr">Attach a photo</span>
+      </label>
+      <textarea id="input" rows="1" maxlength="4000" placeholder="Ask a question…" aria-label="Message"></textarea>
+      <button id="send" type="submit" class="primary">Send</button>
+    </div>
+    <p class="fine">Answers come from O'Dea's website and bell system and can be wrong. Check important details with the front office.</p>
+  </form>
+
+  <script src="app.js"></script>
+</body>
+</html>
