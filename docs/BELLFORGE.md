@@ -39,7 +39,7 @@ the calendar every 30 minutes.
   The BellForge engine also gets its session from the device's login page in
   a browser window today, so a headless login would need new, untested code.
 
-**Recommendation:** start with A. Move to B only if stale data becomes a real
+**Decided (2026-11-25): A.** Move to B only if stale data becomes a real
 problem, and then with a read-only device account if CyberData supports one.
 
 ## The sync contract (for BellForge)

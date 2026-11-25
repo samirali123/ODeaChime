@@ -2,9 +2,10 @@
 
 | # | Question | Decision | Status |
 |---|---|---|---|
+| 0 | Hostnames | Web: `odeachime.odea.org` (internal DNS). Teams bot: `odeachime-bot.<domain on Cloudflare>`. | Decided 2026-11-25 |
 | 1 | Google Workspace or Microsoft 365? | **Microsoft 365.** Web sign-in through Entra ID (oauth2-proxy); Teams is a first-class channel; roles come from Entra ID groups. | Decided 2026-11-25 |
 | 2 | Which model? | **Claude Haiku 5.5** through the Claude API (questions may leave the building). The on-site model stays in the code as an option if a GPU server comes later. | Decided 2026-11-25 (revised: the proposed server has no GPU) |
-| 3 | BellForge data: desktop push, or server logs in to the bell device? | **Desktop push** recommended; see [BELLFORGE.md](BELLFORGE.md#decision-3-why-bellforge-pushes-the-calendar-not-the-server-logging-in). | Awaiting confirmation |
+| 3 | BellForge data: desktop push, or server logs in to the bell device? | **Option A: the BellForge desktop app pushes the calendar**; see [BELLFORGE.md](BELLFORGE.md#decision-3-why-bellforge-pushes-the-calendar-not-the-server-logging-in). The BellForge2.0 changes are not started yet. | Decided 2026-11-25 |
 | 4 | Who at launch? | **Staff only** (`ASSISTANT_MIN_ROLE=staff`), enforced by Entra ID groups on web and Teams. | Decided 2026-11-25 |
 | 5 | Server | The Xeon Gold 5315Y / 16 GB box runs the app; no GPU needed with Claude. Sizing below kept for a possible later on-site model. | Decided 2026-11-25 |
 | 6 | Conversation log retention | Proposal: 30 days, admins only. | Needs admin sign-off |
