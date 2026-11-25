@@ -26,6 +26,42 @@ Rest of the server: 8+ CPU cores, 64 GB RAM, 1 TB NVMe, a UPS. Power and
 cooling: a 24 GB card draws 300–450 W under load. Plan the room, not just
 the budget line.
 
+## Proposed server: Xeon Gold 5315Y, 16 GB RAM, no GPU (evaluated 2026-11-25)
+
+The CPU is 8 cores / 16 threads, Ice Lake, with AVX-512 and up to 8 DDR4-2933 memory channels.
+
+| Job | Verdict |
+|---|---|
+| Run the app (Caddy, sign-in, orchestrator, Postgres, crawler) with Claude as the model | **Yes, comfortably.** About 2–3 GB of RAM in use. |
+| Main on-site model, CPU only | **No.** These are estimates (see the benchmark below): roughly 30–90 s per answer with an 8B model, people wait in line behind each other, and photos take minutes. |
+| Small text-only fallback for sensitive questions | **Barely.** A 3–4B model can run, but it's slow and makes more tool-calling mistakes. |
+
+Why CPU-only is slow:
+- **Reading the prompt.** Each turn the model reads 3–5K tokens: the instructions, the tool definitions, and the search results. That prompt-reading step is limited by compute. On 8 cores it runs at only tens to low hundreds of tokens a second, so 30–60 s before the first word appears.
+- **Writing the answer.** This step is limited by memory bandwidth. 16 GB is probably 1–2 memory sticks, which is 1–2 of the 8 channels: about 25–45 GB/s, or about 4–8 words a second from an 8B model.
+- **RAM.** An 8B 4-bit model needs about 6 GB on top of the app's 3 GB. 16 GB fits that but nothing larger.
+
+**Ways to make it work:**
+1. **Add a GPU (recommended).** An NVIDIA L4 (24 GB, 72 W, low-profile, powered by the slot, no extra power cable) fits most 1U/2U servers. It turns this box into a good pilot server: an 8–14B vision model answering in a few seconds.
+2. **RAM to 64 GB across all 8 channels (8 × 8 GB).** This makes writing answers about 4–6 times faster, but reading the prompt stays slow. It helps, but on its own it isn't enough.
+3. **Use the server as is with Claude** (`PRIMARY_MODEL=claude`) for the staff pilot, and add the GPU when the budget arrives.
+
+What the vendor or IT needs to confirm for option 1:
+- a free PCIe x16 slot (low-profile or full-height)
+- 75 W of power at that slot
+- airflow suitable for a passively cooled card (the server's fans must push air through it)
+- the server model number
+
+Benchmark to replace these estimates (run it on the server):
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull qwen3:8b
+ollama run qwen3:8b --verbose "Summarize O'Dea High School's bell schedule rules in 5 bullet points: $(head -c 8000 /usr/share/common-licenses/GPL-3)"
+```
+
+Read the `prompt eval rate` and `eval rate` lines (tokens a second). For a usable experience you want prompt eval of at least 500/s and eval of at least 15/s.
+
 Until it arrives: `PRIMARY_MODEL=claude` with Claude Haiku 5.5 (about
 $0.10 / $0.50 per million input/output tokens; a staff pilot is likely a few
 dollars a month).
