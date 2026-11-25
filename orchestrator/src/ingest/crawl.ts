@@ -14,7 +14,7 @@ import { createPool, migrate } from "../db.js";
 const START = process.env.ODEA_SITE_URL ?? "https://www.odea.org/";
 const MAX_PAGES = Number(process.env.CRAWL_MAX_PAGES ?? 500);
 const DELAY_MS = Number(process.env.CRAWL_DELAY_MS ?? 750);
-const USER_AGENT = "OdeaAssistantCrawler/0.1 (on-site school assistant)";
+const USER_AGENT = "ODeaChimeCrawler/0.1 (on-site school assistant)";
 const CHUNK_CHARS = 1500;
 
 export interface Page {

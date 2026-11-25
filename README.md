@@ -1,4 +1,4 @@
-# O'Dea Assistant
+# ODeaChime
 
 An on-site AI assistant for O'Dea High School. Staff ask questions on a web
 page or in **Microsoft Teams** and get answers from the school website, the

@@ -1,8 +1,8 @@
 {
-  "name": "odea-assistant-orchestrator",
+  "name": "odeachime-orchestrator",
   "version": "0.1.0",
   "private": true,
-  "description": "Chat API for the O'Dea Assistant: model router, tool loop, and data-source tools",
+  "description": "Chat API for ODeaChime: model router, tool loop, and data-source tools",
   "type": "module",
   "engines": {
     "node": ">=22"

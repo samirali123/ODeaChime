@@ -31,9 +31,9 @@ export interface TeamsOptions {
 }
 
 const WELCOME =
-  "Hi! I'm the O'Dea Assistant. Ask me about bell schedules, events, athletics, policies and more. " +
+  "Hi! I'm ODeaChime. Ask me about bell schedules, events, athletics, policies and more. " +
   'Try "What schedule is today?" Type "new chat" to start over.';
-const PHOTO_NOTE = "I can't read photos sent in Teams yet. Open the O'Dea Assistant web page to ask about a photo.";
+const PHOTO_NOTE = "I can't read photos sent in Teams yet. Open the ODeaChime web page to ask about a photo.";
 
 export class TeamsChannel {
   private readonly authConfig: AuthConfiguration;
@@ -93,7 +93,7 @@ export class TeamsChannel {
       return;
     }
 
-    // In channels and group chats the text includes "<at>O'Dea Assistant</at>".
+    // In channels and group chats the text includes "<at>ODeaChime</at>".
     const text = (activity.removeRecipientMention() ?? activity.text ?? "").trim();
     const convKey = `teams:${activity.conversation?.id}:${aadId}`;
 

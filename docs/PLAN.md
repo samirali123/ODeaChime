@@ -1,4 +1,4 @@
-# O'Dea Assistant: plan
+# ODeaChime: plan
 
 An on-site AI assistant for O'Dea High School, running on the school's own
 server with **Claude Haiku 5.5** as the model. Staff (and later students and

@@ -76,7 +76,7 @@ export class ChatService {
   async ask(req: AskRequest): Promise<AskResult> {
     const { user } = req;
     if (this.opts.minRole && ROLE_RANK[user.role] < ROLE_RANK[this.opts.minRole]) {
-      throw new ChatError(403, "The O'Dea Assistant is only open to staff right now. It's coming to everyone soon.");
+      throw new ChatError(403, "ODeaChime is only open to staff right now. It's coming to everyone soon.");
     }
     if (!this.allow(user.id)) throw new ChatError(429, "You've sent a lot of messages. Please wait a bit and try again.");
     const message = req.message.trim();

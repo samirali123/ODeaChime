@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build teams/package/odea-assistant.zip, the file a Teams admin uploads in
+"""Build teams/package/odeachime.zip, the file a Teams admin uploads in
 the Teams admin center (Teams apps -> Manage apps -> Upload new app).
 
     TEAMS_APP_ID=<uuid, generate once and keep> clientId=<bot app id> \
@@ -23,7 +23,7 @@ if left:
     sys.exit(f"Placeholders not filled: {left}")
 json.loads(manifest)  # fail early on a broken manifest
 
-out = here / "odea-assistant.zip"
+out = here / "odeachime.zip"
 with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
     z.writestr("manifest.json", manifest)
     z.write(here / "color.png", "color.png")

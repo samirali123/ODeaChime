@@ -10,12 +10,12 @@
     "termsOfUseUrl": "${TERMS_URL}"
   },
   "name": {
-    "short": "O'Dea Assistant",
-    "full": "O'Dea Assistant"
+    "short": "ODeaChime",
+    "full": "ODeaChime"
   },
   "description": {
     "short": "Ask about bell schedules, events and school info.",
-    "full": "The O'Dea Assistant answers questions about O'Dea High School: today's bell schedule, events, athletics, policies and contacts, using the school website and the bell system. Answers can be wrong; check important details with the front office."
+    "full": "ODeaChime answers questions about O'Dea High School: today's bell schedule, events, athletics, policies and contacts, using the school website and the bell system. Answers can be wrong; check important details with the front office."
   },
   "icons": {
     "color": "color.png",

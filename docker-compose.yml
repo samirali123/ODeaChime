@@ -1,4 +1,4 @@
-# O'Dea Assistant: everything that runs on the on-site server.
+# ODeaChime: everything that runs on the on-site server.
 #
 #   cp .env.example .env     # then fill it in
 #   docker compose up -d                                 # Claude only

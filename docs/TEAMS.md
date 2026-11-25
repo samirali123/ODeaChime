@@ -1,6 +1,6 @@
 # Microsoft Teams
 
-Staff message **O'Dea Assistant** in Teams: in a 1:1 chat, or by
+Staff message **ODeaChime** in Teams: in a 1:1 chat, or by
 @mentioning it in a team channel or group chat. It gives the same answers as
 the web page, because both go through `ChatService`
 (`orchestrator/src/chat/service.ts`).
@@ -55,7 +55,7 @@ Agents SDK (`@microsoft/agents-hosting`, the successor to the Bot Framework SDK)
    ```
    Keep the `TEAMS_APP_ID` you generated; reuse it for later versions.
 7. **Teams admin center** → Teams apps → Manage apps → *Upload new app* →
-   `teams/package/odea-assistant.zip`. For the staff-only launch, use an
+   `teams/package/odeachime.zip`. For the staff-only launch, use an
    **app setup policy / availability** limited to the staff group, and
    optionally pin the app for them.
 

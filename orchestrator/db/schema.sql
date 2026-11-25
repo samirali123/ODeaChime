@@ -1,4 +1,4 @@
--- O'Dea Assistant database. Idempotent: safe to run on every start.
+-- ODeaChime database. Idempotent: safe to run on every start.
 
 CREATE EXTENSION IF NOT EXISTS vector; -- for Phase 3 embeddings; unused in Phase 1
 

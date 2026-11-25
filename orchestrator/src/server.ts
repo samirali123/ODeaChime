@@ -188,7 +188,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(config.port, () => {
-  console.log(`O'Dea Assistant on :${config.port}`, {
+  console.log(`ODeaChime on :${config.port}`, {
     ...router.describe(),
     search: !!pool,
     teams: !!teams,
