@@ -12,6 +12,19 @@ on-site model on a GPU remains an option for later.
 - **Teams setup:** [docs/TEAMS.md](docs/TEAMS.md)
 - **Microsoft 365 admin checklist:** [docs/M365-SETUP.md](docs/M365-SETUP.md)
 
+## Related: BellForge 2.0
+
+[BellForge 2.0](https://github.com/samirali123/BellForge2.0) is O'Dea's
+desktop app (macOS and Windows) for the bell system. It enters bell
+schedules into the CyberData/InformaCast calendar, shows the calendar month
+by month, and deletes bells. Writes run in a background job queue, are
+checked against the calendar afterward, and are recorded in an activity log.
+
+ODeaChime reads from BellForge: the schedule types in its
+`schools/odea/schedules.json`, and the calendar months the BellForge app
+sends after reading them. ODeaChime never logs in to the bell device itself.
+See [docs/BELLFORGE.md](docs/BELLFORGE.md).
+
 ## Layout
 
 ```
