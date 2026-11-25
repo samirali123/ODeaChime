@@ -10,6 +10,7 @@ on-site model on a GPU remains an option for later.
 - **Decisions and GPU sizing:** [docs/DECISIONS.md](docs/DECISIONS.md)
 - **BellForge integration:** [docs/BELLFORGE.md](docs/BELLFORGE.md)
 - **Teams setup:** [docs/TEAMS.md](docs/TEAMS.md)
+- **Microsoft 365 admin checklist:** [docs/M365-SETUP.md](docs/M365-SETUP.md)
 
 ## Layout
 
