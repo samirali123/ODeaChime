@@ -3,12 +3,34 @@
 | # | Question | Decision | Status |
 |---|---|---|---|
 | 1 | Google Workspace or Microsoft 365? | **Microsoft 365.** Web sign-in through Entra ID (oauth2-proxy); Teams is a first-class channel; roles come from Entra ID groups. | Decided 2026-11-25 |
-| 2 | Can questions leave the building (Claude API)? | **Yes, allowed**, but the **on-site model is the target primary** for security. Claude is the interim primary until the GPU arrives, then a fallback (`ALLOW_CLAUDE_FALLBACK`), which can be switched off. | Decided 2026-11-25 |
+| 2 | Which model? | **Claude Haiku 5.5** through the Claude API (questions may leave the building). The on-site model stays in the code as an option if a GPU server comes later. | Decided 2026-11-25 (revised: the proposed server has no GPU) |
 | 3 | BellForge data: desktop push, or server logs in to the bell device? | **Desktop push** recommended; see [BELLFORGE.md](BELLFORGE.md#decision-3-why-bellforge-pushes-the-calendar-not-the-server-logging-in). | Awaiting confirmation |
 | 4 | Who at launch? | **Staff only** (`ASSISTANT_MIN_ROLE=staff`), enforced by Entra ID groups on web and Teams. | Decided 2026-11-25 |
-| 5 | GPU budget | Coming; sizing below. | Waiting on budget |
+| 5 | Server | The Xeon Gold 5315Y / 16 GB box runs the app; no GPU needed with Claude. Sizing below kept for a possible later on-site model. | Decided 2026-11-25 |
 | 6 | Conversation log retention | Proposal: 30 days, admins only. | Needs admin sign-off |
 | 7 | Staff-only documents in search | Allowed via `audience='staff'`; who may upload? | Open |
+| 8 | Can teachers' Microsoft 365 Copilot licenses power the assistant? | **No**: a Copilot license isn't API credit another app can spend. Copilot *can* use our data as an agent action; see below. | Answered 2026-11-25 |
+
+## Copilot (decision 8)
+
+A teacher's Microsoft 365 Copilot license pays for using Copilot inside
+Microsoft's apps. It can't be used as API credit by another application, and
+there are no per-teacher "tokens" our server could borrow. Our server must
+have its own model access, which is Claude Haiku 5.5.
+
+The other direction works: **Copilot can call our server.** The tools here
+(bell schedules, website search) can be exposed as an MCP server or API plugin.
+A *declarative agent* in Microsoft 365 Copilot, or a Copilot Studio agent,
+can then answer "what schedule is today?" inside Copilot, using Microsoft's
+model and the teacher's license. Trade-offs:
+- We don't control the model, prompt or answer quality, and logging is split.
+- Write actions (BellForge, phase 6) are harder to make safe there.
+- Licensing for agent calls (included, or billed as Copilot Studio credits)
+  depends on the school's agreement. Check with the Microsoft account rep.
+
+Plan: the assistant on Claude Haiku is the main product. An "O'Dea data"
+Copilot agent is an optional later add-on, and it's cheap to add because
+the tools already exist.
 
 ## GPU sizing (for decision 5)
 

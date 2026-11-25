@@ -3,8 +3,8 @@
 An on-site AI assistant for O'Dea High School. Staff ask questions on a web
 page or in **Microsoft Teams** and get answers from the school website, the
 **BellForge** bell schedules and (later) calendars and documents, with sources.
-It runs on the school's own server. The on-site model is the main model
-once the GPU server arrives; Claude covers until then and as a fallback.
+It runs on the school's own server, with Claude Haiku 5.5 as the model. An
+on-site model on a GPU remains an option for later.
 
 - **Plan:** [docs/PLAN.md](docs/PLAN.md)
 - **Decisions and GPU sizing:** [docs/DECISIONS.md](docs/DECISIONS.md)
@@ -68,7 +68,7 @@ the Teams tunnel.
 
 ## Status
 
-Phase 1 code: web chat, Teams channel, model router (on-site first, Claude
-fallback), BellForge read tools with a sync endpoint, website crawler and
+Phase 1 code: web chat, Teams channel, Claude Haiku 5.5 (on-site model
+optional), BellForge read tools with a sync endpoint, website crawler and
 search, staff-only gate, 21 unit tests. Not yet tried against a live model
 or the live website; see the plan for what's next.

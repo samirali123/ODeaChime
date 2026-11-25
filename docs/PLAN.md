@@ -1,6 +1,7 @@
 # O'Dea Assistant: plan
 
-An on-site AI assistant for O'Dea High School. Staff (and later students and
+An on-site AI assistant for O'Dea High School, running on the school's own
+server with **Claude Haiku 5.5** as the model. Staff (and later students and
 families) ask questions on a web page or in **Microsoft Teams** and get
 answers from approved sources: the school website and documents, BellForge's
 bell schedules, and calendars. It can also read photos (flyers, posted
@@ -17,13 +18,13 @@ schedules through BellForge, always with a person confirming.
  ┌─────────────────────────── orchestrator (TypeScript) ──────────────────────────┐
  │ channels: web, Teams ─► ChatService: roles · rate limits · logging           │
  │                           │                                                  │
- │                ModelRouter: on-site model ─(down?)─► Claude fallback          │
+ │                ModelRouter: Claude Haiku 5.5 (on-site model optional)        │
  │                           │                                                  │
  │                tool loop ─► tools: search_odea_site · bell_day · bell_schedule │
  └───────────────┬───────────────────────┬────────────────────────────┬─────────┘
                  ▼                       ▼                            ▼
-          Postgres (+pgvector)    Ollama on the GPU            BellForge cache
-          pages · chunks · logs   (Claude via API as fallback)  (pushed by BellForge)
+          Postgres (+pgvector)    Claude API (Haiku 5.5)       BellForge cache
+          pages · chunks · logs                                 (pushed by BellForge)
 ```
 
 - **One service, many channels.** Web and Teams both call
@@ -39,12 +40,13 @@ schedules through BellForge, always with a person confirming.
 | Phase | Delivers | Done when |
 |---|---|---|
 | 0. Groundwork | Admin/IT sign-off, data sources, eval set filled in, server, Entra ID app registration | Decisions 3, 6, 7 settled |
-| 1. Staff pilot on the web (Claude interim) | Web chat behind Microsoft 365 sign-in, website search with sources, bell tools | ≥ 90% on the eval set; 10–20 staff testers |
+| 1. Staff pilot on the web | Web chat behind Microsoft 365 sign-in, website search with sources, bell tools | ≥ 90% on the eval set; 10–20 staff testers |
 | 2. Teams | Bot in Teams for staff | Same eval results via Teams |
 | 3. BellForge sync | BellForge pushes calendar months | `bell_day` right for every synced day |
-| 4. On-site model | GPU server, Ollama, model chosen by eval; becomes primary, Claude fallback | Local model within a few points of Claude on the eval set |
+| 4. Tuning | Prompt and tool improvements from pilot logs; Sonnet 5.5 for questions Haiku gets wrong, if needed | ≥ 95% on the eval set |
 | 5. More sources | PDFs and uploaded documents, calendar (ICS), embeddings (hybrid search), photos in Teams | Eval questions per source |
 | 6. Staff actions | "Apply Gold late start to Tuesday" → proposed BellForge job, confirmed by a person, logged with the M365 identity | Admin sign-off |
+| Optional | On-site model on a GPU (code is ready: `PRIMARY_MODEL=ollama`); a Copilot agent that uses our tools (decision 8) | When budget and need appear |
 | 7. Wider rollout | Students, then families: roles, moderation, retention | Pilot with one grade first |
 
 ## Safety

@@ -42,11 +42,11 @@ export const config = {
       }
     : undefined,
   /**
-   * Which model answers by default. O'Dea's target is "ollama" (on-site);
-   * use "claude" until the GPU server is in place.
+   * Which model answers by default. O'Dea runs on Claude Haiku 5.5; "ollama"
+   * is kept for a possible on-site GPU model later.
    */
-  primaryModel: env("PRIMARY_MODEL", "ollama") as "claude" | "ollama",
-  /** When the on-site model is down (or can't read a photo), may Claude answer instead? */
+  primaryModel: env("PRIMARY_MODEL", "claude") as "claude" | "ollama",
+  /** Only with PRIMARY_MODEL=ollama: when the on-site model is down, may Claude answer instead? */
   allowClaudeFallback: env("ALLOW_CLAUDE_FALLBACK", "true") === "true",
   /** Lowest role allowed to use the assistant at all. "staff" for the staff-only launch. */
   minRole: role(env("ASSISTANT_MIN_ROLE"), "staff"),
